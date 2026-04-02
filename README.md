@@ -8,7 +8,7 @@
 > 🔬 An AI-powered early-diabetes prediction system trained on **10 machine learning models**, wrapped in an intuitive **Streamlit** web application for real-time health assessment.
 
 ## DataSet Used:
-![Kaggle](https://www.kaggle.com/datasets/uciml/pima-indians-diabetes-database)
+Dataset: [Kaggle](https://www.kaggle.com/datasets/uciml/pima-indians-diabetes-database)
 
 ## 🧠 About the Project
 
@@ -69,10 +69,12 @@ The project benchmarks **10 different ML models** to identify the best-performin
 - LinkedIn: [Husen](https://linkedin.com/in/husennavsariwala)
 
 ---
-## ✎ Note:-
-Download (.ipynb,app.py) file make sure you have download all necessary libraries
-Than run the .ipynb in your IDE(Anaconda,Vscode,Pycharm), I recommend Anaconda Navigator
-After runnig .ipynb this gives (3-.pkl,graphs images,2.csv) files 
-than run app.py
+| Step | Action                                                                                                         | Output / Notes                                                                         |
+| ---- | -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| 1    | Download the `.ipynb` notebook and `app.py` script, including all required libraries.                          | Ensure your environment has every dependency installed.                                |
+| 2    | Run the `.ipynb` file in your IDE (Anaconda Navigator is the safest choice; VS Code or PyCharm also work).     | The notebook executes preprocessing, training, evaluation, and export routines.        |
+| 3    | After execution, the notebook generates **3 `.pkl` files**, **multiple graph images**, and **2 `.csv` files**. | These artifacts are used by the Streamlit/FastAPI/Flask app (depending on your setup). |
+| 4    | Run `app.py` after all files are generated.                                                                    | The app loads the `.pkl` models and datasets to produce predictions and UI visuals.    |
+
 
 <p align="center">Made with ❤️ and Python | ⭐ Star this repo if you found it helpful!</p>
