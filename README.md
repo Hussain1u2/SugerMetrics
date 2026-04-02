@@ -69,5 +69,10 @@ The project benchmarks **10 different ML models** to identify the best-performin
 - LinkedIn: [Husen](https://linkedin.com/in/husennavsariwala)
 
 ---
+## ✎ Note:-
+Download (.ipynb,app.py) file make sure you have download all necessary libraries
+Than run the .ipynb in your IDE(Anaconda,Vscode,Pycharm), I recommend Anaconda Navigator
+After runnig .ipynb this gives (3-.pkl,graphs images,2.csv) files 
+than run app.py
 
 <p align="center">Made with ❤️ and Python | ⭐ Star this repo if you found it helpful!</p>
