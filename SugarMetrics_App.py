@@ -520,7 +520,7 @@ with tab3:
     disp = results_df.sort_values('AUC-ROC', ascending=False).reset_index(drop=True)
     disp.index += 1
     st.dataframe(
-        disp.style.applymap(highlight, subset=['Accuracy','Precision','Recall','F1-Score','AUC-ROC']),
+        disp.style.map(highlight, subset=['Accuracy','Precision','Recall','F1-Score','AUC-ROC']),
         use_container_width=True, height=370
     )
 
