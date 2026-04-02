@@ -74,7 +74,7 @@ The project benchmarks **10 different ML models** to identify the best-performin
 | 1    | Download the `.ipynb` notebook and `app.py` script, including all required libraries.                          | Ensure your environment has every dependency installed.                                |
 | 2    | Run the `.ipynb` file in your IDE (Anaconda Navigator is the safest choice; VS Code or PyCharm also work).     | The notebook executes preprocessing, training, evaluation, and export routines.        |
 | 3    | After execution, the notebook generates **3 `.pkl` files**, **multiple graph images**, and **2 `.csv` files**. | These artifacts are used by the Streamlit/FastAPI/Flask app (depending on your setup). |
-| 4    | Run `app.py` after all files are generated.                                                                    | The app loads the `.pkl` models and datasets to produce predictions and UI visuals.    |
-
+| 4    | Add the requirements.txt to the same project folder.                                                           | Required for deployment or reproducible setup. |
+| 5    | Run `app.py` after all files are generated.                                                                    | The app loads the `.pkl` models and datasets to produce predictions and UI visuals.    |
 
 <p align="center">Made with ❤️ and Python | ⭐ Star this repo if you found it helpful!</p>
