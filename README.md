@@ -47,7 +47,7 @@ The project benchmarks **10 different ML models** to identify the best-performin
 
 ## 🎬 Demo
 
-> 🚀 **Live App:** _[Add your Streamlit Cloud / Hugging Face link here]_
+> 🚀 **Live App:** _[https://sugermetrics-hn.streamlit.app/]_
 
 ## 🛠️ Tech Stack
 
