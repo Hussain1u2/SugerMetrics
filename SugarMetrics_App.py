@@ -4,7 +4,6 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 import seaborn as sns
 import joblib
 import warnings
@@ -12,9 +11,6 @@ from scipy.stats import gaussian_kde
 
 warnings.filterwarnings('ignore')
 
-# ─────────────────────────────────────────────────────────────────────────────
-# PAGE CONFIG
-# ─────────────────────────────────────────────────────────────────────────────
 st.set_page_config(
     page_title="SugarMetrics",
     page_icon="🩺",
@@ -22,22 +18,16 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# ─────────────────────────────────────────────────────────────────────────────
-# CSS  –  clean Power-BI dark theme
-# ─────────────────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 html, body, .stApp {
     background: #111 !important;
     font-family: 'Inter', 'Segoe UI', sans-serif !important;
     color: #ddd !important;
 }
 .main .block-container { padding: 0 1.6rem 2rem !important; max-width: 100% !important; }
-
 [data-testid="stSidebar"] {
     background: #181818 !important;
     border-right: 1px solid #242424 !important;
@@ -45,7 +35,6 @@ html, body, .stApp {
 }
 [data-testid="stSidebar"] > div:first-child { padding: 0 !important; }
 [data-testid="stSidebarNav"] { display: none !important; }
-
 .topbar {
     background: #181818; border-bottom: 1px solid #242424;
     padding: 0.75rem 1.6rem; margin: 0 -1.6rem 1.5rem;
@@ -54,7 +43,6 @@ html, body, .stApp {
 .topbar-accent { width: 3px; height: 1.1rem; border-radius: 2px; background: #0078d4; flex-shrink: 0; }
 .topbar-title  { font-size: 0.95rem; font-weight: 600; color: #fff; }
 .topbar-sub    { font-size: 0.72rem; color: #555; margin-left: auto; }
-
 .nav-brand { padding: 1.2rem 1rem 0.9rem; border-bottom: 1px solid #242424; }
 .nav-brand-icon  { font-size: 1.5rem; }
 .nav-brand-name  { font-size: 0.92rem; font-weight: 700; color: #fff; margin-top: 0.25rem; }
@@ -64,7 +52,6 @@ html, body, .stApp {
     text-transform: uppercase; letter-spacing: 1.5px;
     padding: 0.9rem 1rem 0.25rem;
 }
-
 [data-testid="stSidebar"] .stRadio { padding: 0 !important; }
 [data-testid="stSidebar"] .stRadio > label { display: none !important; }
 [data-testid="stSidebar"] .stRadio > div  { gap: 2px !important; padding: 0 6px !important; }
@@ -78,7 +65,6 @@ html, body, .stApp {
     background: #0078d4 !important; color: #fff !important; font-weight: 600 !important;
 }
 [data-testid="stSidebar"] .stRadio div[role="radio"] p { margin: 0 !important; color: inherit !important; }
-
 .kpi {
     background: #181818; border: 1px solid #242424; border-radius: 7px;
     padding: 0.9rem 1rem 0.85rem; position: relative; overflow: hidden;
@@ -88,17 +74,14 @@ html, body, .stApp {
 .kpi-val  { font-size: 1.55rem; font-weight: 700; color: var(--c, #0078d4); line-height: 1.1; }
 .kpi-sub  { font-size: 0.67rem; color: #444; margin-top: 0.18rem; }
 .kpi-ico  { position: absolute; right: 0.9rem; top: 50%; transform: translateY(-50%); font-size: 1.6rem; opacity: 0.1; }
-
 .cc { background: #181818; border: 1px solid #242424; border-radius: 7px; padding: 1rem 1.1rem 0.85rem; margin-bottom: 0.7rem; }
 .cc-title { font-size: 0.68rem; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: .9px; margin-bottom: 0.75rem; }
-
 .sec {
     font-size: 0.65rem; font-weight: 600; color: #444;
     text-transform: uppercase; letter-spacing: 1.2px;
     border-bottom: 1px solid #1e1e1e;
     padding-bottom: 0.4rem; margin: 1.1rem 0 0.8rem;
 }
-
 .res-card {
     background: #181818; border-radius: 7px;
     padding: 1.4rem 1.2rem; text-align: center;
@@ -112,7 +95,6 @@ html, body, .stApp {
     font-size: 0.72rem; font-weight: 600; margin-top: 0.6rem;
     background: rgba(255,255,255,0.05); border: 1px solid var(--bc); color: var(--bc);
 }
-
 .stNumberInput label, .stTextInput label, .stSelectbox label { color: #777 !important; font-size: 0.73rem !important; }
 .stNumberInput > div > div > input,
 .stTextInput   > div > div > input {
@@ -121,7 +103,6 @@ html, body, .stApp {
 }
 .stNumberInput > div > div > input:focus { border-color: #0078d4 !important; }
 .stSelectbox > div > div { background: #1e1e1e !important; border: 1px solid #2e2e2e !important; border-radius: 5px !important; }
-
 .stButton > button {
     background: #0078d4 !important; color: #fff !important; border: none !important;
     border-radius: 5px !important; font-weight: 600 !important; font-size: 0.83rem !important;
@@ -132,7 +113,6 @@ html, body, .stApp {
     background: #107c41 !important; color: #fff !important; border: none !important;
     border-radius: 5px !important; font-weight: 600 !important;
 }
-
 [data-testid="metric-container"] {
     background: #181818 !important; border: 1px solid #242424 !important;
     border-radius: 6px !important; padding: 0.7rem !important;
@@ -158,15 +138,12 @@ hr { border-color: #1e1e1e !important; }
 # ─────────────────────────────────────────────────────────────────────────────
 FEAT_ALL = ['Pregnancies','Glucose','BloodPressure','SkinThickness',
             'Insulin','BMI','DiabetesPedigreeFunction','Age']
-
 ZERO_IMPUTE_COLS = ['Glucose','BloodPressure','SkinThickness','Insulin','BMI']
-
 MEDIANS = {
     'Pregnancies': 3, 'Glucose': 117.0, 'BloodPressure': 72.0,
     'SkinThickness': 23.0, 'Insulin': 30.5, 'BMI': 32.0,
     'DiabetesPedigreeFunction': 0.372, 'Age': 29,
 }
-
 BG   = '#181818'
 LN   = '#242424'
 TXT  = '#cccccc'
@@ -176,9 +153,6 @@ GRN  = '#27ae60'
 ORG  = '#d4a017'
 PUR  = '#8e44ad'
 
-# ─────────────────────────────────────────────────────────────────────────────
-# SAMPLE CSV  (embedded — used in Bulk Scanner download button)
-# ─────────────────────────────────────────────────────────────────────────────
 SAMPLE_CSV_DATA = """\
 PatientID,Pregnancies,Glucose,BloodPressure,SkinThickness,Insulin,BMI,DiabetesPedigreeFunction,Age
 P001,6,148,72,35,0,33.6,0.627,50
@@ -203,9 +177,6 @@ P019,1,103,30,38,83,43.3,0.183,33
 P020,1,115,70,30,96,34.6,0.529,32
 """
 
-# ─────────────────────────────────────────────────────────────────────────────
-# LOAD ARTIFACTS
-# ─────────────────────────────────────────────────────────────────────────────
 @st.cache_resource
 def load_artifacts():
     model    = joblib.load('best_model.pkl')
@@ -227,9 +198,6 @@ try:
 except Exception as e:
     READY = False; _err = str(e)
 
-# ─────────────────────────────────────────────────────────────────────────────
-# HELPERS
-# ─────────────────────────────────────────────────────────────────────────────
 def fig(w=8, h=4):
     f, a = plt.subplots(figsize=(w, h))
     f.patch.set_facecolor(BG); a.set_facecolor(BG)
@@ -292,9 +260,6 @@ with st.sidebar:
         768 records · SMOTE balanced
     </div>""", unsafe_allow_html=True)
 
-# ─────────────────────────────────────────────────────────────────────────────
-# TOP BAR
-# ─────────────────────────────────────────────────────────────────────────────
 _meta = {
     "🔬  Risk Prediction":   ("Risk Prediction",   "StandardScaler → SelectKBest(6) → Random Forest"),
     "📊  Data Insights":     ("Data Insights",     "Pima Indians Diabetes · 768 records · 8 clinical features"),
@@ -310,20 +275,15 @@ st.markdown(f"""
     <div class="topbar-sub">{ps}</div>
 </div>""", unsafe_allow_html=True)
 
-# ─────────────────────────────────────────────────────────────────────────────
-# GUARD
-# ─────────────────────────────────────────────────────────────────────────────
 if not READY and page != "ℹ️   About":
     st.error(f"Could not load model artifacts: {_err}")
-    st.info("Place `best_model.pkl`, `scaler.pkl`, `features.pkl`, `diabetes_clean.csv` "
-            "and `model_results.csv` in the same directory.")
+    st.info("Place `best_model.pkl`, `scaler.pkl`, `features.pkl`, `diabetes_clean.csv` and `model_results.csv` in the same directory.")
     st.stop()
 
-# ═════════════════════════════════════════════════════════════════════════════
-# PAGE 1  ─  RISK PREDICTION
-# ═════════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
+# PAGE 1 — RISK PREDICTION
+# ═══════════════════════════════════════════════════════════════════════════════
 if page == "🔬  Risk Prediction":
-
     col_form, col_out = st.columns([1, 1], gap="large")
 
     with col_form:
@@ -336,22 +296,16 @@ if page == "🔬  Risk Prediction":
             StandardScaler → SelectKBest(6) → Random Forest
             &nbsp;·&nbsp; Zeros auto-imputed with training medians
         </div>""", unsafe_allow_html=True)
-
         ra, rb = st.columns(2)
         with ra:
             pregnancies = st.number_input("Pregnancies",        min_value=0,    max_value=17,   value=1,     step=1)
-            blood_pres  = st.number_input("Blood Pressure mmHg",min_value=0,    max_value=122,  value=70,    step=1,
-                                          help="0 will be imputed with training median (72 mmHg)")
-            insulin     = st.number_input("Insulin μU/mL",      min_value=0,    max_value=846,  value=80,    step=1,
-                                          help="0 will be imputed with training median (30.5 μU/mL)")
+            blood_pres  = st.number_input("Blood Pressure mmHg",min_value=0,    max_value=122,  value=70,    step=1, help="0 will be imputed with training median (72 mmHg)")
+            insulin     = st.number_input("Insulin μU/mL",      min_value=0,    max_value=846,  value=80,    step=1, help="0 will be imputed with training median (30.5 μU/mL)")
             dpf         = st.number_input("Pedigree Function",  min_value=0.078,max_value=2.420,value=0.350, step=0.001, format="%.3f")
         with rb:
-            glucose    = st.number_input("Glucose mg/dL",       min_value=0,    max_value=199,  value=110,   step=1,
-                                         help="0 will be imputed with training median (117 mg/dL)")
-            skin_thick = st.number_input("Skin Thickness mm",   min_value=0,    max_value=99,   value=20,    step=1,
-                                         help="0 will be imputed with training median (23 mm)")
-            bmi        = st.number_input("BMI kg/m²",           min_value=0.0,  max_value=67.0, value=28.0,  step=0.1,  format="%.1f",
-                                         help="0 will be imputed with training median (32.0 kg/m²)")
+            glucose    = st.number_input("Glucose mg/dL",       min_value=0,    max_value=199,  value=110,   step=1, help="0 will be imputed with training median (117 mg/dL)")
+            skin_thick = st.number_input("Skin Thickness mm",   min_value=0,    max_value=99,   value=20,    step=1, help="0 will be imputed with training median (23 mm)")
+            bmi        = st.number_input("BMI kg/m²",           min_value=0.0,  max_value=67.0, value=28.0,  step=0.1, format="%.1f", help="0 will be imputed with training median (32.0 kg/m²)")
             age        = st.number_input("Age years",            min_value=21,   max_value=81,   value=33,    step=1)
         st.markdown('</div>', unsafe_allow_html=True)
         sp(0.4)
@@ -362,8 +316,7 @@ if page == "🔬  Risk Prediction":
         'SkinThickness': skin_thick, 'Insulin': insulin, 'BMI': bmi,
         'DiabetesPedigreeFunction': dpf, 'Age': age
     }
-    clean_vals = {f: (MEDIANS[f] if (f in ZERO_IMPUTE_COLS and v == 0) else v)
-                  for f, v in raw_vals.items()}
+    clean_vals = {f: (MEDIANS[f] if (f in ZERO_IMPUTE_COLS and v == 0) else v) for f, v in raw_vals.items()}
     inp    = pd.DataFrame([clean_vals])[FEAT_ALL]
     scaled = pd.DataFrame(scaler.transform(inp), columns=FEAT_ALL)
     pred   = model.predict(scaled[features])[0]
@@ -388,11 +341,10 @@ if page == "🔬  Risk Prediction":
             <div class="res-badge">{rlb}</div>
         </div>""", unsafe_allow_html=True)
         sp(0.6)
-
         f_g, a_g = plt.subplots(figsize=(6, 1.2))
         f_g.patch.set_facecolor(BG); a_g.set_facecolor(BG)
         a_g.barh([0],[100],color='#222',height=0.55)
-        a_g.barh([0],[pct], color=rc,   height=0.55, alpha=0.9)
+        a_g.barh([0],[pct], color=rc, height=0.55, alpha=0.9)
         for thresh, c in [(30,ORG),(60,RED)]:
             a_g.axvline(thresh, color=c, lw=1, ls='--', alpha=0.6)
         for x, t, c in [(15,'Low',GRN),(45,'Moderate',ORG),(80,'High',RED)]:
@@ -404,18 +356,15 @@ if page == "🔬  Risk Prediction":
         st.pyplot(f_g, use_container_width=True); plt.close()
 
     sp()
-
     sec("Patient Health Summary")
     g   = clean_vals['Glucose']
     b   = clean_vals['BMI']
     bp  = clean_vals['BloodPressure']
-    ins = clean_vals['Insulin']
-
     k1,k2,k3,k4 = st.columns(4)
-    kpi_card(k1,"Diabetes Risk Score",  f"{pct:.1f}%",  rlb,                                                                rc,   "🎯")
-    kpi_card(k2,"Glucose Level",        f"{g:.0f}",     "Normal 70–100 mg/dL · "+("✓ Normal" if 70<=g<=100 else "⚠ Elevated"),  BLUE if 70<=g<=100 else ORG, "🍬")
-    kpi_card(k3,"BMI",                  f"{b:.1f}",     "Healthy 18.5–24.9 · "+("✓ Normal" if 18.5<=b<=24.9 else "⚠ Review"),   GRN  if 18.5<=b<=24.9 else ORG, "⚖️")
-    kpi_card(k4,"Blood Pressure",       f"{bp:.0f}",    "Normal 60–80 mmHg · "+("✓ Normal" if 60<=bp<=80 else "⚠ Check"),       GRN  if 60<=bp<=80 else ORG, "💉")
+    kpi_card(k1,"Diabetes Risk Score", f"{pct:.1f}%", rlb, rc, "🎯")
+    kpi_card(k2,"Glucose Level",       f"{g:.0f}",    "Normal 70–100 mg/dL · "+("✓ Normal" if 70<=g<=100 else "⚠ Elevated"), BLUE if 70<=g<=100 else ORG, "🍬")
+    kpi_card(k3,"BMI",                 f"{b:.1f}",    "Healthy 18.5–24.9 · "+("✓ Normal" if 18.5<=b<=24.9 else "⚠ Review"),  GRN  if 18.5<=b<=24.9 else ORG, "⚖️")
+    kpi_card(k4,"Blood Pressure",      f"{bp:.0f}",   "Normal 60–80 mmHg · "+("✓ Normal" if 60<=bp<=80 else "⚠ Check"),      GRN  if 60<=bp<=80 else ORG, "💉")
 
     sp()
     sec("Active Model Features")
@@ -434,7 +383,6 @@ if page == "🔬  Risk Prediction":
     sp()
     sec("Clinical Analysis")
     cr, cf = st.columns(2)
-
     with cr:
         feat_r = ['Glucose','BMI','Age','Insulin','BloodPressure','Pregnancies']
         p_v = [(clean_vals['Glucose']/199),(clean_vals['BMI']/67),(age/81),
@@ -443,7 +391,6 @@ if page == "🔬  Risk Prediction":
         h_v = [(df[df['Outcome']==0][f].mean()-df[f].min())/(df[f].max()-df[f].min()) for f in feat_r]
         ang = np.linspace(0,2*np.pi,len(feat_r),endpoint=False).tolist()+[0]
         ext = lambda l: l+l[:1]
-
         f_r, a_r = figp(5.5, 4.8)
         a_r.plot(ang,ext(p_v),'o-',color=BLUE,lw=2,ms=4,label='Patient',zorder=3)
         a_r.fill(ang,ext(p_v),alpha=0.15,color=BLUE)
@@ -453,13 +400,11 @@ if page == "🔬  Risk Prediction":
         a_r.set_xticklabels(feat_r,color='#888',fontsize=8,fontweight='500')
         a_r.set_yticklabels([])
         a_r.set_title('Patient vs Population Profile',color=TXT,fontweight='600',pad=14,fontsize=9)
-        a_r.legend(loc='upper right',bbox_to_anchor=(1.4,1.12),fontsize=7.5,
-                   facecolor=BG,edgecolor=LN,labelcolor='#bbb')
+        a_r.legend(loc='upper right',bbox_to_anchor=(1.4,1.12),fontsize=7.5,facecolor=BG,edgecolor=LN,labelcolor='#bbb')
         plt.tight_layout()
         st.markdown('<div class="cc"><div class="cc-title">Feature Radar (6 active + 2 context features)</div>', unsafe_allow_html=True)
         st.pyplot(f_r, use_container_width=True); plt.close()
         st.markdown('</div>', unsafe_allow_html=True)
-
     with cf:
         fi = pd.Series(model.feature_importances_, index=features).sort_values()
         f_fi, a_fi = fig(5.5, 4.8)
@@ -467,8 +412,7 @@ if page == "🔬  Risk Prediction":
         clrs = [RED if f==fi.idxmax() else BLUE for f in fi.index]
         bars = a_fi.barh(fi.index, fi.values, color=clrs, height=0.5, edgecolor=BG)
         for b, v in zip(bars, fi.values):
-            a_fi.text(b.get_width()+0.002, b.get_y()+b.get_height()/2,
-                      f'{v:.3f}', va='center', fontsize=8, color='#aaa', fontweight='500')
+            a_fi.text(b.get_width()+0.002, b.get_y()+b.get_height()/2, f'{v:.3f}', va='center', fontsize=8, color='#aaa', fontweight='500')
         a_fi.set_xlabel('Importance Score')
         a_fi.set_title('Feature Importance (Top driver highlighted)',fontsize=9,fontweight='600')
         plt.tight_layout()
@@ -476,11 +420,10 @@ if page == "🔬  Risk Prediction":
         st.pyplot(f_fi, use_container_width=True); plt.close()
         st.markdown('</div>', unsafe_allow_html=True)
 
-# ═════════════════════════════════════════════════════════════════════════════
-# PAGE 2  ─  DATA INSIGHTS
-# ═════════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
+# PAGE 2 — DATA INSIGHTS
+# ═══════════════════════════════════════════════════════════════════════════════
 elif page == "📊  Data Insights":
-
     total   = len(df)
     d_count = int(df['Outcome'].sum())
     h_count = total - d_count
@@ -488,18 +431,16 @@ elif page == "📊  Data Insights":
     mean_bm = df['BMI'].mean()
 
     k1,k2,k3,k4 = st.columns(4)
-    kpi_card(k1,"Total Patients",   f"{total:,}",                     f"{d_count} diabetic · {h_count} healthy", BLUE, "👥")
-    kpi_card(k2,"Diabetic Rate",    f"{d_count/total*100:.1f}%",      f"{d_count} out of {total} patients",       RED,  "📊")
-    kpi_card(k3,"Mean Glucose",     f"{mean_gl:.0f} mg/dL",           "dataset average across all records",       ORG,  "🍬")
-    kpi_card(k4,"Mean BMI",         f"{mean_bm:.1f}",                 "dataset average · healthy range 18.5–24.9",GRN,  "⚖️")
+    kpi_card(k1,"Total Patients",  f"{total:,}",              f"{d_count} diabetic · {h_count} healthy", BLUE, "👥")
+    kpi_card(k2,"Diabetic Rate",   f"{d_count/total*100:.1f}%", f"{d_count} out of {total} patients",    RED,  "📊")
+    kpi_card(k3,"Mean Glucose",    f"{mean_gl:.0f} mg/dL",    "dataset average across all records",       ORG,  "🍬")
+    kpi_card(k4,"Mean BMI",        f"{mean_bm:.1f}",          "dataset average · healthy range 18.5–24.9",GRN,  "⚖️")
 
     sp()
     sec("Feature Explorer")
     sel = st.selectbox("Select feature:", FEAT_ALL, index=1, label_visibility="collapsed")
     sp(0.3)
-
     cl, cr = st.columns(2)
-
     with cl:
         f_d, a_d = fig(6.5, 4)
         a_d.grid(axis='x', visible=False)
@@ -515,20 +456,19 @@ elif page == "📊  Data Insights":
         st.markdown('<div class="cc"><div class="cc-title">Distribution</div>', unsafe_allow_html=True)
         st.pyplot(f_d, use_container_width=True); plt.close()
         st.markdown('</div>', unsafe_allow_html=True)
-
     with cr:
         f_b, a_b = fig(6.5, 4)
         a_b.grid(axis='x', visible=False)
-        bp = a_b.boxplot(
+        bp_plot = a_b.boxplot(
             [df[df['Outcome']==0][sel].dropna(), df[df['Outcome']==1][sel].dropna()],
             labels=['Healthy','Diabetic'], patch_artist=True, widths=0.42,
             medianprops=dict(color='#fff',lw=1.5),
             flierprops=dict(marker='o',markerfacecolor='#444',markersize=3,linestyle='none')
         )
-        for patch, c in zip(bp['boxes'],[GRN,RED]):
+        for patch, c in zip(bp_plot['boxes'],[GRN,RED]):
             patch.set_facecolor(c); patch.set_alpha(0.55)
         for el in ['whiskers','caps']:
-            for it in bp[el]: it.set_color('#555')
+            for it in bp_plot[el]: it.set_color('#555')
         Q1,Q3 = df[sel].quantile([0.25,0.75]); iqr=Q3-Q1
         n_out = int(((df[sel]<Q1-1.5*iqr)|(df[sel]>Q3+1.5*iqr)).sum())
         a_b.set_title(f'{sel} — Box Plot · {n_out} outliers', fontsize=9, fontweight='600')
@@ -539,7 +479,6 @@ elif page == "📊  Data Insights":
 
     sec("Correlation & Statistics")
     ch, cs = st.columns([3,2])
-
     with ch:
         corr = df.corr(numeric_only=True)
         f_c, a_c = fig(8, 5)
@@ -554,7 +493,6 @@ elif page == "📊  Data Insights":
         st.markdown('<div class="cc"><div class="cc-title">Correlation Heatmap</div>', unsafe_allow_html=True)
         st.pyplot(f_c, use_container_width=True); plt.close()
         st.markdown('</div>', unsafe_allow_html=True)
-
     with cs:
         f_p, a_p = plt.subplots(figsize=(4.5,3.5))
         f_p.patch.set_facecolor(BG); a_p.set_facecolor(BG)
@@ -567,52 +505,52 @@ elif page == "📊  Data Insights":
         )
         for at in autos: at.set_fontweight('700')
         a_p.add_patch(plt.Circle((0,0),0.55,color=BG))
-        a_p.text(0,0,f'{d_count/total*100:.0f}%\nDiabetic',
-                 ha='center',va='center',fontsize=10,fontweight='700',color=RED)
+        a_p.text(0,0,f'{d_count/total*100:.0f}%\nDiabetic', ha='center',va='center',fontsize=10,fontweight='700',color=RED)
         a_p.set_title('Outcome Split', color=TXT, fontsize=9, fontweight='600')
         plt.tight_layout()
         st.markdown('<div class="cc"><div class="cc-title">Outcome Distribution</div>', unsafe_allow_html=True)
         st.pyplot(f_p, use_container_width=True); plt.close()
         st.markdown('</div>', unsafe_allow_html=True)
-
         sp(0.4)
         st.markdown('<div class="cc"><div class="cc-title">Descriptive Statistics</div>', unsafe_allow_html=True)
         st.dataframe(df[FEAT_ALL].describe().round(2), use_container_width=True, height=210)
         st.markdown('</div>', unsafe_allow_html=True)
 
-# ═════════════════════════════════════════════════════════════════════════════
-# PAGE 3  ─  MODEL PERFORMANCE
-# ═════════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
+# PAGE 3 — MODEL PERFORMANCE  (updated KPIs — driven by actual model_results.csv)
+# ═══════════════════════════════════════════════════════════════════════════════
 elif page == "📈  Model Performance":
 
-    best_auc_row = results_df.loc[results_df['AUC-ROC'].idxmax()]
-    best_acc_row = results_df.loc[results_df['Accuracy'].idxmax()]
-    best_f1_row  = results_df.loc[results_df['F1-Score'].idxmax()]
-
-    best_name = best_auc_row['Model']
-    best_acc  = best_acc_row['Accuracy']
-    best_auc  = best_auc_row['AUC-ROC']
-    best_f1   = best_f1_row['F1-Score']
+    best_auc_row  = results_df.loc[results_df['AUC-ROC'].idxmax()]
+    best_acc_row  = results_df.loc[results_df['Accuracy'].idxmax()]
+    best_f1_row   = results_df.loc[results_df['F1-Score'].idxmax()]
+    # Random Forest is the deployed model
+    deployed_row  = results_df[results_df['Model'] == 'Random Forest'].iloc[0]
 
     k1,k2,k3,k4 = st.columns(4)
-    kpi_card(k1,"Best Model",    best_name,           "ranked by AUC-ROC score",    PUR, "🏆")
-    kpi_card(k2,"Best Accuracy", f"{best_acc:.2f}%",  "highest classification rate", GRN, "🎯")
-    kpi_card(k3,"Best AUC-ROC",  f"{best_auc:.2f}%",  "area under ROC curve",        BLUE,"📈")
-    kpi_card(k4,"Best F1-Score", f"{best_f1:.2f}%",   "precision-recall harmonic",   ORG, "⚖️")
+    kpi_card(k1,"Best AUC-ROC",   f"{results_df['AUC-ROC'].max():.2f}%",
+             f"{best_auc_row['Model']} · best discrimination",          PUR, "🏆")
+    kpi_card(k2,"Best Accuracy",  f"{results_df['Accuracy'].max():.2f}%",
+             f"{best_acc_row['Model']} · classification rate",           GRN, "🎯")
+    kpi_card(k3,"Best F1-Score",  f"{results_df['F1-Score'].max():.2f}%",
+             f"{best_f1_row['Model']} · precision-recall harmonic",      ORG, "⚖️")
+    kpi_card(k4,"Deployed Model", f"{deployed_row['AUC-ROC']:.2f}%",
+             "Random Forest · AUC-ROC score",                             BLUE,"🚀")
 
     sp()
     sec("Leaderboard")
-    disp = results_df.sort_values('AUC-ROC',ascending=False).reset_index(drop=True)
+    disp = results_df.sort_values('AUC-ROC', ascending=False).reset_index(drop=True)
     disp.index += 1
 
     def _sn(v):
-        if not isinstance(v,float): return ''
-        if v>=95: return f'color:{GRN};font-weight:600'
-        if v>=90: return f'color:{ORG};font-weight:600'
+        if not isinstance(v, float): return ''
+        if v >= 95: return f'color:{GRN};font-weight:600'
+        if v >= 90: return f'color:{ORG};font-weight:600'
+        if v >= 80: return ''
         return f'color:{RED}'
 
-    ncols = [c for c in disp.columns if c!='Model']
-    st.dataframe(disp.style.map(_sn, subset=ncols), use_container_width=True, height=340)
+    ncols = [c for c in disp.columns if c != 'Model']
+    st.dataframe(disp.style.map(_sn, subset=ncols), use_container_width=True, height=380)
     sp()
 
     sec("Visual Comparison")
@@ -625,8 +563,7 @@ elif page == "📈  Model Performance":
         clr_a = [RED if v==sr['Accuracy'].max() else BLUE for v in sr['Accuracy']]
         bars_a = a_a.barh(sr['Model'], sr['Accuracy'], color=clr_a, height=0.5, edgecolor=BG)
         for b, v in zip(bars_a, sr['Accuracy']):
-            a_a.text(b.get_width()+0.4, b.get_y()+b.get_height()/2,
-                     f'{v:.1f}', va='center', fontsize=7.5, color='#aaa', fontweight='500')
+            a_a.text(b.get_width()+0.4, b.get_y()+b.get_height()/2, f'{v:.1f}', va='center', fontsize=7.5, color='#aaa', fontweight='500')
         a_a.set_xlabel('Accuracy (%)'); a_a.set_xlim(0,115)
         a_a.set_title('Accuracy', fontsize=9, fontweight='600')
         plt.tight_layout()
@@ -641,9 +578,8 @@ elif page == "📈  Model Performance":
         clr_b = [ORG if v==sr2['AUC-ROC'].max() else '#1a4f7a' for v in sr2['AUC-ROC']]
         bars_b = a_b2.barh(sr2['Model'], sr2['AUC-ROC'], color=clr_b, height=0.5, edgecolor=BG)
         for b, v in zip(bars_b, sr2['AUC-ROC']):
-            a_b2.text(b.get_width()+0.06, b.get_y()+b.get_height()/2,
-                      f'{v:.1f}', va='center', fontsize=7.5, color='#aaa', fontweight='500')
-        a_b2.set_xlabel('AUC-ROC (%)'); a_b2.set_xlim(80,108)
+            a_b2.text(b.get_width()+0.06, b.get_y()+b.get_height()/2, f'{v:.1f}', va='center', fontsize=7.5, color='#aaa', fontweight='500')
+        a_b2.set_xlabel('AUC-ROC (%)'); a_b2.set_xlim(70, 110)
         a_b2.set_title('AUC-ROC', fontsize=9, fontweight='600')
         plt.tight_layout()
         st.markdown('<div class="cc"><div class="cc-title">AUC-ROC Ranking</div>', unsafe_allow_html=True)
@@ -655,10 +591,8 @@ elif page == "📈  Model Performance":
         a_sc.grid(color=LN, lw=0.5)
         cmap_sc = plt.cm.tab10(np.linspace(0,1,len(disp)))
         for i, (_,row) in enumerate(disp.iterrows()):
-            a_sc.scatter(row['F1-Score'],row['AUC-ROC'],
-                         s=90, color=cmap_sc[i-1], zorder=5, edgecolors='#333', lw=0.8)
-            a_sc.annotate(row['Model'],(row['F1-Score'],row['AUC-ROC']),
-                          textcoords='offset points',xytext=(4,2),fontsize=6.5,color='#888')
+            a_sc.scatter(row['F1-Score'],row['AUC-ROC'], s=90, color=cmap_sc[i-1], zorder=5, edgecolors='#333', lw=0.8)
+            a_sc.annotate(row['Model'],(row['F1-Score'],row['AUC-ROC']), textcoords='offset points',xytext=(4,2),fontsize=6.5,color='#888')
         a_sc.set_xlabel('F1-Score (%)'); a_sc.set_ylabel('AUC-ROC (%)')
         a_sc.set_title('F1 vs AUC-ROC', fontsize=9, fontweight='600')
         plt.tight_layout()
@@ -674,7 +608,6 @@ elif page == "📈  Model Performance":
         mets = ['Accuracy','Precision','Recall','F1-Score','AUC-ROC']
         ang_r = np.linspace(0,2*np.pi,len(mets),endpoint=False).tolist()+[0]
         rcols = [BLUE,GRN,ORG,RED,PUR]
-
         f_rad, a_rad = figp(7, 5.5)
         for i, (_,row) in enumerate(top5.iterrows()):
             v = [row[m] for m in mets]+[row[mets[0]]]
@@ -682,20 +615,18 @@ elif page == "📈  Model Performance":
             a_rad.fill(ang_r,v,alpha=0.05,color=rcols[i])
         a_rad.set_xticks(ang_r[:-1])
         a_rad.set_xticklabels(mets,color='#888',fontsize=8.5,fontweight='500')
-        a_rad.set_yticklabels([]); a_rad.set_ylim(85,101)
+        a_rad.set_yticklabels([]); a_rad.set_ylim(70, 102)
         a_rad.set_title('Top 5 Models — Multi-Metric Radar',color=TXT,fontweight='600',pad=16,fontsize=9)
-        a_rad.legend(loc='upper right',bbox_to_anchor=(1.38,1.15),fontsize=8,
-                     facecolor=BG,edgecolor=LN,labelcolor='#ccc')
+        a_rad.legend(loc='upper right',bbox_to_anchor=(1.38,1.15),fontsize=8,facecolor=BG,edgecolor=LN,labelcolor='#ccc')
         plt.tight_layout()
         st.markdown('<div class="cc"><div class="cc-title">Multi-Metric Comparison</div>', unsafe_allow_html=True)
         st.pyplot(f_rad, use_container_width=True); plt.close()
         st.markdown('</div>', unsafe_allow_html=True)
 
-# ═════════════════════════════════════════════════════════════════════════════
-# PAGE 4  ─  BULK SCANNER
-# ═════════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
+# PAGE 4 — BULK SCANNER
+# ═══════════════════════════════════════════════════════════════════════════════
 elif page == "📂  Bulk Scanner":
-
     ALIASES = {
         'Pregnancies':             ['pregnancies','preg','pregnancy','num_pregnancies'],
         'Glucose':                 ['glucose','glu','blood_glucose','plasma_glucose','glucose_mg'],
@@ -703,8 +634,7 @@ elif page == "📂  Bulk Scanner":
         'SkinThickness':           ['skinthickness','skin_thickness','skin','triceps','skin_fold'],
         'Insulin':                 ['insulin','serum_insulin','insulin_level','insulin_2hr'],
         'BMI':                     ['bmi','body_mass_index','bodymassindex'],
-        'DiabetesPedigreeFunction':['diabetespedigreefunction','pedigree','dpf',
-                                    'diabetes_pedigree','pedigree_function'],
+        'DiabetesPedigreeFunction':['diabetespedigreefunction','pedigree','dpf','diabetes_pedigree','pedigree_function'],
         'Age':                     ['age','patient_age','age_years'],
     }
 
@@ -717,18 +647,15 @@ elif page == "📂  Bulk Scanner":
             m[feat] = hit
         return m
 
-    # ── SAMPLE CSV DOWNLOAD PANEL ─────────────────────────────────────────────
     st.markdown(f"""
     <div style="background:#181818;border:1px solid #242424;border-radius:7px;
                 padding:1rem 1.2rem;margin-bottom:1rem;
                 display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap;">
         <div style="flex:1;min-width:200px;">
-            <div style="font-size:0.72rem;font-weight:600;color:#888;margin-bottom:0.2rem;">
-                📄 Don't have a file yet?
-            </div>
+            <div style="font-size:0.72rem;font-weight:600;color:#888;margin-bottom:0.2rem;">📄 Don't have a file yet?</div>
             <div style="font-size:0.68rem;color:#555;line-height:1.7;">
-                Download the sample CSV (20 patients · all 8 features · real Pima-style values including zeros
-                for imputation testing) — fill in your own data and re-upload.
+                Download the sample CSV (20 patients · all 8 features · real Pima-style values
+                including zeros for imputation testing) — fill in your own data and re-upload.
             </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:0.35rem;font-size:0.65rem;color:#444;">
@@ -743,33 +670,24 @@ elif page == "📂  Bulk Scanner":
         data=SAMPLE_CSV_DATA.encode('utf-8'),
         file_name="SugarMetrics_sample_patients.csv",
         mime="text/csv",
-        help="20 anonymised patients with all 8 clinical features — use as a template",
         use_container_width=False,
     )
-
     sp(0.5)
 
-    # ── FILE UPLOADER ─────────────────────────────────────────────────────────
-    uploaded = st.file_uploader(
-        "Upload patient dataset (CSV · JSON · XLSX)",
-        type=["csv","json","xlsx"]
-    )
+    uploaded = st.file_uploader("Upload patient dataset (CSV · JSON · XLSX)", type=["csv","json","xlsx"])
 
     if uploaded is None:
         st.markdown("""
         <div style="background:#181818;border:2px dashed #242424;border-radius:8px;
                     padding:3rem 2rem;text-align:center;margin-top:1rem;">
             <div style="font-size:2.4rem;margin-bottom:0.6rem;">📂</div>
-            <div style="font-size:0.95rem;font-weight:600;color:#bbb;margin-bottom:0.35rem;">
-                No file uploaded yet</div>
+            <div style="font-size:0.95rem;font-weight:600;color:#bbb;margin-bottom:0.35rem;">No file uploaded yet</div>
             <div style="color:#444;font-size:0.8rem;line-height:1.9;max-width:420px;margin:0 auto;">
                 Drop a <strong style="color:#777;">CSV, JSON or XLSX</strong> file above.<br>
                 Columns are auto-matched to the 8 clinical features.<br>
-                Missing features are filled with training-set medians.<br>
-                <span style="color:#2e2e2e;">← Use the sample CSV above to get started.</span>
+                Missing features are filled with training-set medians.
             </div>
         </div>""", unsafe_allow_html=True)
-
     else:
         try:
             ext = uploaded.name.rsplit('.',1)[-1].lower()
@@ -793,7 +711,6 @@ elif page == "📂  Bulk Scanner":
 
         sec("Column Mapping")
         st.caption("Auto-detected — override if needed")
-
         auto_m  = auto_map(raw_df.columns.tolist())
         opts    = ["— skip —"] + raw_df.columns.tolist()
         map_res = {}
@@ -807,19 +724,16 @@ elif page == "📂  Bulk Scanner":
 
         mapped   = [f for f,c in map_res.items() if c]
         unmapped = [f for f,c in map_res.items() if not c]
-
         m1,m2 = st.columns(2)
         m1.markdown(f"""<div style="background:rgba(39,174,96,.07);border:1px solid {GRN};
             border-radius:5px;padding:0.55rem 0.9rem;font-size:0.77rem;">
             <span style="color:{GRN};font-weight:600;">✓ Mapped ({len(mapped)}/8):</span>
-            <span style="color:#888;"> {', '.join(mapped) or '—'}</span></div>""",
-            unsafe_allow_html=True)
+            <span style="color:#888;"> {', '.join(mapped) or '—'}</span></div>""", unsafe_allow_html=True)
         bc2 = RED if unmapped else '#333'
         m2.markdown(f"""<div style="background:rgba(192,57,43,.06);border:1px solid {bc2};
             border-radius:5px;padding:0.55rem 0.9rem;font-size:0.77rem;">
             <span style="color:{bc2};font-weight:600;">⚠ Missing ({len(unmapped)}):</span>
-            <span style="color:#888;"> {', '.join(unmapped) if unmapped else 'None — all present!'}</span></div>""",
-            unsafe_allow_html=True)
+            <span style="color:#888;"> {', '.join(unmapped) if unmapped else 'None — all present!'}</span></div>""", unsafe_allow_html=True)
 
         if unmapped:
             st.info("Missing features will be filled with training-set medians.")
@@ -838,47 +752,35 @@ elif page == "📂  Bulk Scanner":
                         ib[feat] = vals
                     else:
                         ib[feat] = MEDIANS[feat]
-
-                sc2    = pd.DataFrame(scaler.transform(ib[FEAT_ALL]),
-                                      columns=FEAT_ALL, index=ib.index)
+                sc2    = pd.DataFrame(scaler.transform(ib[FEAT_ALL]), columns=FEAT_ALL, index=ib.index)
                 preds  = model.predict(sc2[features])
                 probas = model.predict_proba(sc2[features])[:,1]*100
-
                 out = raw_df.copy().reset_index(drop=True)
-                out.insert(0,'Risk_Level',
-                           pd.cut(probas,bins=[-1,30,60,101],
-                                  labels=['Low','Moderate','High']).astype(str))
-                out.insert(0,'Prediction',
-                           ['Diabetic' if p==1 else 'Non-Diabetic' for p in preds])
+                out.insert(0,'Risk_Level', pd.cut(probas,bins=[-1,30,60,101],labels=['Low','Moderate','High']).astype(str))
+                out.insert(0,'Prediction', ['Diabetic' if p==1 else 'Non-Diabetic' for p in preds])
                 out.insert(0,'Diabetes_Prob_%', probas.round(2))
 
             sec("Batch Results")
-            nt  = len(out)
-            nd  = int((preds==1).sum())
-            nh  = nt-nd
-            avg = probas.mean()
-            hir = int((probas>=60).sum())
-
+            nt  = len(out); nd = int((preds==1).sum()); nh = nt-nd
+            avg = probas.mean(); hir = int((probas>=60).sum())
             bk1,bk2,bk3,bk4,bk5 = st.columns(5)
-            kpi_card(bk1,"Scanned",       f"{nt:,}",         "total patient records",         BLUE,"👥")
-            kpi_card(bk2,"Diabetic",       nd,                f"{nd/nt*100:.1f}% of batch",    RED, "🔴")
-            kpi_card(bk3,"Non-Diabetic",   nh,                f"{nh/nt*100:.1f}% of batch",    GRN, "🟢")
-            kpi_card(bk4,"Avg Risk Score", f"{avg:.1f}%",     "mean probability",              ORG, "📊")
-            kpi_card(bk5,"High-Risk",      hir,               "probability ≥ 60%",             RED, "⚠️")
-
+            kpi_card(bk1,"Scanned",      f"{nt:,}",       "total patient records",      BLUE,"👥")
+            kpi_card(bk2,"Diabetic",      nd,              f"{nd/nt*100:.1f}% of batch", RED, "🔴")
+            kpi_card(bk3,"Non-Diabetic",  nh,              f"{nh/nt*100:.1f}% of batch", GRN, "🟢")
+            kpi_card(bk4,"Avg Risk Score",f"{avg:.1f}%",   "mean probability",           ORG, "📊")
+            kpi_card(bk5,"High-Risk",     hir,             "probability ≥ 60%",          RED, "⚠️")
             sp()
             sec("Risk Distribution")
             bc1, bc2_col = st.columns(2)
-
             with bc1:
                 f_h, a_h = fig(6,3.8)
                 a_h.grid(axis='x',visible=False)
-                n_arr, bins_arr, _ = a_h.hist(probas,bins=26,color=BLUE,edgecolor=BG,alpha=0.8)
+                n_arr, _, _ = a_h.hist(probas,bins=26,color=BLUE,edgecolor=BG,alpha=0.8)
                 a_h.axvline(30,color=ORG,lw=1.2,ls='--',label='30% threshold')
                 a_h.axvline(60,color=RED,lw=1.2,ls='--',label='60% threshold')
-                a_h.fill_betweenx([0,n_arr.max()*1.05],  0, 30,alpha=0.04,color=GRN)
-                a_h.fill_betweenx([0,n_arr.max()*1.05], 30, 60,alpha=0.04,color=ORG)
-                a_h.fill_betweenx([0,n_arr.max()*1.05], 60,100,alpha=0.04,color=RED)
+                a_h.fill_betweenx([0,n_arr.max()*1.05], 0, 30,alpha=0.04,color=GRN)
+                a_h.fill_betweenx([0,n_arr.max()*1.05],30, 60,alpha=0.04,color=ORG)
+                a_h.fill_betweenx([0,n_arr.max()*1.05],60,100,alpha=0.04,color=RED)
                 a_h.set_xlabel('Diabetes Probability (%)'); a_h.set_ylabel('Patient Count')
                 a_h.set_title('Score Distribution', fontsize=9, fontweight='600')
                 a_h.legend(facecolor=BG,edgecolor=LN,labelcolor='#bbb',fontsize=8)
@@ -886,24 +788,17 @@ elif page == "📂  Bulk Scanner":
                 st.markdown('<div class="cc"><div class="cc-title">Probability Histogram</div>', unsafe_allow_html=True)
                 st.pyplot(f_h, use_container_width=True); plt.close()
                 st.markdown('</div>', unsafe_allow_html=True)
-
             with bc2_col:
-                lc = int((probas<30).sum())
-                mc = int(((probas>=30)&(probas<60)).sum())
-                hc = int((probas>=60).sum())
+                lc = int((probas<30).sum()); mc = int(((probas>=30)&(probas<60)).sum()); hc = int((probas>=60).sum())
                 f_d2, a_d2 = plt.subplots(figsize=(6,3.8))
                 f_d2.patch.set_facecolor(BG); a_d2.set_facecolor(BG)
-                wedges2,_,auts2 = a_d2.pie(
-                    [lc,mc,hc], labels=['Low','Moderate','High'],
+                wedges2,_,auts2 = a_d2.pie([lc,mc,hc], labels=['Low','Moderate','High'],
                     colors=[GRN,ORG,RED], autopct='%1.1f%%', startangle=140,
                     textprops={'color':'#bbb','fontsize':9},
-                    wedgeprops={'edgecolor':'#111','linewidth':2},
-                    pctdistance=0.75
-                )
+                    wedgeprops={'edgecolor':'#111','linewidth':2}, pctdistance=0.75)
                 for at in auts2: at.set_fontweight('700')
                 a_d2.add_patch(plt.Circle((0,0),0.52,color=BG))
-                a_d2.text(0,0,f'{hc}\nHigh Risk',ha='center',va='center',
-                          fontsize=9,fontweight='700',color=RED)
+                a_d2.text(0,0,f'{hc}\nHigh Risk',ha='center',va='center',fontsize=9,fontweight='700',color=RED)
                 a_d2.set_title('Risk Level Split', color=TXT, fontsize=9, fontweight='600')
                 plt.tight_layout()
                 st.markdown('<div class="cc"><div class="cc-title">Risk Level Breakdown</div>', unsafe_allow_html=True)
@@ -911,34 +806,25 @@ elif page == "📂  Bulk Scanner":
                 st.markdown('</div>', unsafe_allow_html=True)
 
             sec("Full Results")
-
             def _sp2(v):
                 if v=='Diabetic':     return f'color:{RED};font-weight:600'
                 if v=='Non-Diabetic': return f'color:{GRN};font-weight:600'
                 return ''
-
             def _sp3(v):
                 if not isinstance(v,float): return ''
                 if v>=60: return f'color:{RED};font-weight:600'
                 if v>=30: return f'color:{ORG};font-weight:600'
                 return f'color:{GRN};font-weight:600'
-
-            st.dataframe(
-                out.style.map(_sp2,subset=['Prediction']).map(_sp3,subset=['Diabetes_Prob_%']),
-                use_container_width=True, height=380
-            )
-
+            st.dataframe(out.style.map(_sp2,subset=['Prediction']).map(_sp3,subset=['Diabetes_Prob_%']),
+                         use_container_width=True, height=380)
             csv_out = out.to_csv(index=False).encode('utf-8')
-            st.download_button(
-                "⬇️  Download Results (CSV)",
-                data=csv_out,
+            st.download_button("⬇️  Download Results (CSV)", data=csv_out,
                 file_name=f"SugarMetrics_{uploaded.name.rsplit('.',1)[0]}_Results.csv",
-                mime='text/csv', use_container_width=True
-            )
+                mime='text/csv', use_container_width=True)
 
-# ═════════════════════════════════════════════════════════════════════════════
-# PAGE 5  ─  ABOUT
-# ═════════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
+# PAGE 5 — ABOUT  (updated with real model_results.csv data)
+# ═══════════════════════════════════════════════════════════════════════════════
 elif page == "ℹ️   About":
 
     st.markdown("""
@@ -959,7 +845,7 @@ elif page == "ℹ️   About":
         (s1,"①","Data Prep",   BLUE, ["Load Pima CSV","Zero-value imputation","IQR outlier capping","Remove duplicates","Log transforms"]),
         (s2,"②","Feature Eng", ORG,  ["MinMax normalise","StandardScaler","Interaction features","Binning (BMI/Age)","SelectKBest ANOVA"]),
         (s3,"③","Balancing",   PUR,  ["SMOTE-style oversample","50/50 class balance","80-20 stratified split","10-fold CV","RFE feature check"]),
-        (s4,"④","Modelling",   GRN,  ["10 sklearn models","GridSearchCV / RandomSearch","Best: Random Forest","Tuned hyperparams","Saved as .pkl"]),
+        (s4,"④","Modelling",   GRN,  ["10 sklearn models","GridSearchCV / RandomSearch","Deployed: Random Forest","Best AUC-ROC: KNN 94.09%","Saved as .pkl"]),
         (s5,"⑤","Evaluation",  RED,  ["Accuracy · Precision","Recall · F1-Score","AUC-ROC · ROC curve","Confusion matrices","Permutation importance"]),
     ]:
         li = "".join(f"<li style='color:#777;font-size:0.78rem;line-height:2;'>{s}</li>" for s in steps)
@@ -989,11 +875,12 @@ elif page == "ℹ️   About":
             "2 lowest-scored features excluded from model",
         ]),
         (d3,"Model & Deployment", ORG, [
-            f"Best model: {results_df.loc[results_df['AUC-ROC'].idxmax()]['Model']} (based on AUC-ROC)",
-            "Grid searched: n_estimators, max_depth, min_samples_split, max_features",
-            "Validated: 10-fold stratified CV on balanced data",
+            "Deployed model: Random Forest · Acc 88.5% · AUC 93.7%",
+            "Best AUC-ROC overall: KNN · 94.09% (evaluate for swap)",
+            "Best F1-Score: Gradient Boosting · 89.3%",
+            "Best Accuracy (tied): Random Forest & Gradient Boosting · 88.5%",
+            "GridSearchCV tuned · 10-fold stratified CV",
             "Artifacts: best_model.pkl · scaler.pkl · features.pkl",
-            "Dashboard data: diabetes_clean.csv · model_results.csv",
         ]),
     ]:
         li = "".join(f"<li style='color:#777;font-size:0.8rem;line-height:2.1;'>{i}</li>" for i in items)
@@ -1005,17 +892,19 @@ elif page == "ℹ️   About":
         </div>""", unsafe_allow_html=True)
 
     sp()
-    sec("10 Models Trained")
+    # ── 10 MODELS TRAINED — sorted by AUC-ROC desc, all metrics from model_results.csv ──
+    sec("10 Models Trained — Ranked by AUC-ROC")
     models_info = [
-    ("KNN ⭐",               "Best AUC-ROC performer (94.09%)",                BLUE),
-    ("Random Forest",       "Top accuracy performer (88.5%)",                  ORG),
-    ("Gradient Boosting",   "Strong recall + accuracy balance",                PUR),
-    ("XGBoost-style GBM",   "High AUC and precision performance",              RED),
-    ("LightGBM-style",      "Efficient gradient boosting variant",             GRN),
-    ("Decision Tree",       "Interpretable baseline tree model",               BLUE),
-    ("Logistic Regression", "Linear baseline classifier",                      GRN),
-    ("SVM",                 "RBF kernel classification",                       ORG),
-    ("AdaBoost",            "Boosted weak learners ensemble",                  RED),
+        ("KNN 🥇",               "Best AUC-ROC 94.09% · Acc 82.0% · Prec 75.4% · Recall 95.0% · F1 84.07%",    GRN),
+        ("Random Forest ⭐",     "Deployed · AUC 93.7% · Acc 88.5% · Prec 84.07% · Recall 95.0% · F1 89.2%",    ORG),
+        ("XGBoost-style GBM",    "AUC 93.58% · Acc 87.5% · Prec 82.61% · Recall 95.0% · F1 88.37%",             RED),
+        ("Gradient Boosting",    "Best F1 89.3% · AUC 92.71% · Acc 88.5% · Prec 83.48% · Recall 96.0%",         PUR),
+        ("LightGBM-style",       "AUC 91.04% · Acc 86.5% · Prec 81.2% · Recall 95.0% · F1 87.56%",              BLUE),
+        ("AdaBoost",             "AUC 85.42% · Acc 81.0% · Prec 77.19% · Recall 88.0% · F1 82.24%",             GRN),
+        ("Decision Tree",        "AUC 84.6% · Acc 80.5% · Prec 76.99% · Recall 87.0% · F1 81.69%",              ORG),
+        ("SVM",                  "AUC 83.13% · Acc 78.5% · Prec 77.14% · Recall 81.0% · F1 79.02%",             PUR),
+        ("Logistic Regression",  "Baseline · AUC 81.18% · Acc 71.5% · Prec 74.16% · Recall 66.0% · F1 69.84%",  RED),
+        ("Neural Network (ANN)", "AUC 80.98% · Acc 75.5% · Prec 71.07% · Recall 86.0% · F1 77.83%",             BLUE),
     ]
     mc = st.columns(5)
     for i, (name, desc, color) in enumerate(models_info):
@@ -1037,9 +926,6 @@ elif page == "ℹ️   About":
         </span>
     </div>""", unsafe_allow_html=True)
 
-# ─────────────────────────────────────────────────────────────────────────────
-# FOOTER
-# ─────────────────────────────────────────────────────────────────────────────
 st.markdown("""
 <hr>
 <div style="text-align:center;color:#2e2e2e;font-size:0.7rem;padding:0.6rem 0;">
