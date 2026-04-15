@@ -585,11 +585,14 @@ elif page == "📊  Data Insights":
 # ═════════════════════════════════════════════════════════════════════════════
 elif page == "📈  Model Performance":
 
-    best_row  = results_df.loc[results_df['AUC-ROC'].idxmax()]
-    best_name = best_row['Model']
-    best_acc  = results_df['Accuracy'].max()
-    best_auc  = results_df['AUC-ROC'].max()
-    best_f1   = results_df['F1-Score'].max()
+    best_auc_row = results_df.loc[results_df['AUC-ROC'].idxmax()]
+    best_acc_row = results_df.loc[results_df['Accuracy'].idxmax()]
+    best_f1_row  = results_df.loc[results_df['F1-Score'].idxmax()]
+
+    best_name = best_auc_row['Model']
+    best_acc  = best_acc_row['Accuracy']
+    best_auc  = best_auc_row['AUC-ROC']
+    best_f1   = best_f1_row['F1-Score']
 
     k1,k2,k3,k4 = st.columns(4)
     kpi_card(k1,"Best Model",    best_name,           "ranked by AUC-ROC score",    PUR, "🏆")
@@ -986,7 +989,7 @@ elif page == "ℹ️   About":
             "2 lowest-scored features excluded from model",
         ]),
         (d3,"Model & Deployment", ORG, [
-            "Best model: Random Forest (GridSearchCV tuned)",
+            f"Best model: {results_df.loc[results_df['AUC-ROC'].idxmax()]['Model']} (based on AUC-ROC)",
             "Grid searched: n_estimators, max_depth, min_samples_split, max_features",
             "Validated: 10-fold stratified CV on balanced data",
             "Artifacts: best_model.pkl · scaler.pkl · features.pkl",
@@ -1004,16 +1007,17 @@ elif page == "ℹ️   About":
     sp()
     sec("10 Models Trained")
     models_info = [
-        ("Logistic Regression",  "Baseline · lbfgs solver · GridSearchCV C",    BLUE),
-        ("Decision Tree",        "max_depth=6 · min_samples_split=10",           GRN),
-        ("Random Forest ⭐",     "Best model · 200 estimators · GridSearchCV",   ORG),
-        ("Gradient Boosting",    "200 estimators · lr=0.1 · RandomizedSearch",   PUR),
-        ("XGBoost-style GBM",    "300 estimators · lr=0.05 · subsample=0.8",     RED),
-        ("SVM",                  "RBF kernel · probability=True · GridSearchCV", BLUE),
-        ("KNN",                  "k=9 · distance weights · Minkowski metric",    GRN),
-        ("Neural Network (ANN)", "128→64→32 · ReLU · Adam · early stopping",     ORG),
-        ("LightGBM-style",       "HistGradientBoosting · GridSearchCV tuned",    PUR),
-        ("AdaBoost",             "200 estimators · lr=0.5 · SAMME algorithm",    RED),
+    ("KNN ⭐",               "Best AUC-ROC performer (94.09%)",                BLUE),
+    ("Random Forest",       "Top accuracy performer (88.5%)",                  ORG),
+    ("Gradient Boosting",   "Strong recall + accuracy balance",                PUR),
+    ("XGBoost-style GBM",   "High AUC and precision performance",              RED),
+    ("LightGBM-style",      "Efficient gradient boosting variant",             GRN),
+    ("Decision Tree",       "Interpretable baseline tree model",               BLUE),
+    ("Logistic Regression", "Linear baseline classifier",                      GRN),
+    ("SVM",                 "RBF kernel classification",                       ORG),
+    ("KNN (alt view)",      "Distance-based classification",                   PUR),
+    ("AdaBoost",            "Boosted weak learners ensemble",                  RED),
+]
     ]
     mc = st.columns(5)
     for i, (name, desc, color) in enumerate(models_info):
