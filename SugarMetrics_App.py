@@ -1017,7 +1017,6 @@ elif page == "ℹ️   About":
     ("SVM",                 "RBF kernel classification",                       ORG),
     ("KNN (alt view)",      "Distance-based classification",                   PUR),
     ("AdaBoost",            "Boosted weak learners ensemble",                  RED),
-]
     ]
     mc = st.columns(5)
     for i, (name, desc, color) in enumerate(models_info):
