@@ -1015,7 +1015,6 @@ elif page == "ℹ️   About":
     ("Decision Tree",       "Interpretable baseline tree model",               BLUE),
     ("Logistic Regression", "Linear baseline classifier",                      GRN),
     ("SVM",                 "RBF kernel classification",                       ORG),
-    ("KNN (alt view)",      "Distance-based classification",                   PUR),
     ("AdaBoost",            "Boosted weak learners ensemble",                  RED),
     ]
     mc = st.columns(5)
